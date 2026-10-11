@@ -1,0 +1,150 @@
+<!DOCTYPE html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Poznávačka – říjen</title>
+<style>
+:root{--bg:#dfe6da;--bg2:#eef2ea;--fg:#18221a;--card:#fbfcf9;--mut:#5a665c;--ac:#4d3f7a;--ac2:#e9e4f6;--bad:#a8231b;--ln:#c9d2c4;--sh:0 1px 2px rgba(20,40,20,.08),0 6px 18px rgba(20,40,20,.07);color-scheme:light dark}
+@media(prefers-color-scheme:dark){:root{--bg:#10150f;--bg2:#171d16;--fg:#e8eee4;--card:#1d251c;--mut:#9aa698;--ac:#c1b3f2;--ac2:#2c2742;--bad:#ff8f84;--ln:#32402f;--sh:0 1px 2px #0006,0 6px 18px #0004}}
+*{box-sizing:border-box}html,body{margin:0}body{background:linear-gradient(180deg,var(--bg2),var(--bg) 320px) fixed;color:var(--fg);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{position:sticky;top:0;z-index:5;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;padding:.65rem 1.2rem;background:color-mix(in srgb,var(--card) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--ln)}
+button,select,input{font:inherit;color:inherit;background:var(--card);border:1px solid var(--ln);border-radius:10px;padding:.42rem .85rem}
+button{cursor:pointer;transition:background .15s}button:hover{background:var(--ac2)}
+button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible,img:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+#sw{position:relative;flex:1;min-width:12rem;max-width:24rem}#q{width:100%}
+#res{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--card);border:1px solid var(--ln);border-radius:12px;box-shadow:var(--sh);max-height:60vh;overflow:auto;padding:.3rem}#res[hidden]{display:none}
+#res button{display:block;width:100%;text-align:left;border:0;border-radius:8px;background:none}#res button:hover,#res button.on{background:var(--ac2)}#res i{color:var(--mut);font-size:.85rem;margin-left:.4rem}#res p{margin:.5rem .7rem;color:var(--mut)}
+select{max-width:18rem}#cnt{color:var(--mut);margin-left:auto;font-variant-numeric:tabular-nums}
+main{display:grid;gap:1.6rem;padding:1.5rem 1.2rem 3rem;max-width:1320px;margin:auto}@media(min-width:960px){main{grid-template-columns:minmax(290px,380px) 1fr;align-items:start}#info{position:sticky;top:5rem}}
+#info{background:var(--card);border:1px solid var(--ln);border-radius:18px;padding:1.4rem 1.5rem;box-shadow:var(--sh);border-left:6px solid var(--ac)}#info.danger{border-left-color:var(--bad)}
+#grp{display:inline-block;margin:0;padding:.1rem .7rem;border-radius:99px;background:var(--ac2);color:var(--ac);font-size:.85rem;font-weight:600}
+h1{font:700 2.3rem/1.12 Georgia,"Times New Roman",serif;margin:.6rem 0 .2rem}#lat{font:italic 1.15rem Georgia,serif;margin:0 0 1rem;color:var(--ac)}
+.warn{display:none;background:var(--bad);color:#fff;padding:.35rem .8rem;border-radius:10px;margin-bottom:.9rem;font-weight:600;font-size:.92rem}.danger .warn{display:block}
+ul{list-style:none;padding:0;margin:0}li{position:relative;margin:.55rem 0;padding-left:1.3rem}li:before{content:"";position:absolute;left:0;top:.62em;width:.6rem;height:.6rem;border-radius:50%;background:var(--ac)}.danger li:before{background:var(--bad)}
+#links{margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--ln);font-size:.9rem}#links a{margin-right:1rem;color:var(--ac);text-underline-offset:3px}
+#gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1rem;align-content:start}.m{color:var(--mut);grid-column:1/-1}
+figure{margin:0;border-radius:14px;overflow:hidden;box-shadow:var(--sh);background:var(--ln)}
+figure img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;cursor:zoom-in;transition:transform .35s}figure:hover img{transform:scale(1.05)}
+#lb{position:fixed;inset:0;z-index:20;background:rgba(6,10,6,.95);display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:none}#lb[hidden]{display:none}
+#li{max-width:92vw;max-height:84vh;cursor:grab;user-select:none;-webkit-user-drag:none;border-radius:6px}
+#lc{position:fixed;left:0;right:0;bottom:0;padding:.7rem 1rem;background:rgba(0,0,0,.72);color:#e4e4e4;font-size:.88rem;text-align:center}#lc a{color:#cfc4ff}
+.nv,#x{position:fixed;background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:50%;width:3rem;height:3rem;font-size:1.5rem;padding:0}.nv:hover,#x:hover{background:rgba(255,255,255,.3)}
+#lp{left:.8rem;top:50%}#ln{right:.8rem;top:50%}#x{top:.8rem;right:.8rem}#lk{position:fixed;top:1.1rem;left:1.2rem;color:#ccc;font-size:.9rem}
+</style></head><body>
+<header><button id="pv" aria-label="Předchozí organismus">‹</button><div id="sw"><input id="q" type="search" placeholder="Hledat podle českého nebo latinského názvu…" autocomplete="off" aria-label="Hledat"><div id="res" hidden></div></div><select id="sel" aria-label="Přejít na organismus"></select><button id="nx" aria-label="Další organismus">›</button><span id="cnt"></span></header>
+<main><section id="info"><p id="grp"></p><h1 id="cz"></h1><p id="lat"></p><div class="warn">⚠ Jedovatá / nebezpečná – viz body níže</div><ul id="pts"></ul><div id="links"></div></section><section id="gal"></section></main>
+<div id="lb" hidden><span id="lk"></span><button id="x" aria-label="Zavřít">✕</button><button class="nv" id="lp" aria-label="Předchozí fotka">‹</button><img id="li" alt=""><button class="nv" id="ln" aria-label="Další fotka">›</button><div id="lc"></div></div>
+<script>
+// cz|latinsky v PDF|aktuální název pro vyhledání (pokud se liší)|body
+const D=`slizovka práškovitá|Fuligo septica||Žlutý pěnovitý polštář (plodnice hlenky) na trouchnivém dřevě, kůře, mulči; zasychá do šedobéžové křehké kůry
+pýchavička vlčí mléko|Lycogala epidendrum||Kuličky 3–15 mm v hloučcích na trouchnivém dřevě; růžové až šedohnědé; po stlačení vytéká růžová pasta
+bedla červenající|Lepiota rhacodes|Chlorophyllum rhacodes|Hnědě šupinatý klobouk; řez rychle oranžově až červenohnědě červená; třeň HLADKÝ (bez hadí kresby); posuvný prsten; bulva na bázi
+bedla vysoká|Macrolepiota procera||Klobouk až 30 cm, uprostřed hrbol, hnědě šupinatý; třeň se ZEBROVANOU („hadí“) kresbou; posuvný dvojitý prsten; dužnina nečervená
+čechratka podvinutá|Paxillus involutus||⚠ Klobouk hnědý, okraj silně podvinutý; lupeny sbíhavé, žlutohnědé, snadno se odlupují; při tlaku tmavnou. Syrová i vařená jedovatá (hemolýza)
+čirůvka májová|Tricholoma georgii|Calocybe gambosa|Roste na jaře (v kruzích na loukách, při keřích); klobouk bělavý až krémový, masitý; lupeny husté, bílé; vůně po čerstvé mouce
+čirůvka havelka|Tricholoma portentosum||Klobouk šedohnědý až olivově šedý, radiálně vláknitý, za vlhka lepkavý; lupeny bělavé s nažloutlým nádechem; pod borovicemi; vůně mouky
+hadovka smrdutá|Phallus impudicus||Z bílého „vejce“ vyroste bílý houbovitý třeň; klobouk s olivově zelenou rosolovitou rouškou; silný mrtvolný zápach, přitahuje mouchy
+hlíva ústřičná|Pleurotus ostreatus||Lasturovitý šedohnědý klobouk, lupeny sbíhavé po krátkém excentrickém třeni; střechovité trsy na kmenech listnáčů
+hnojník obecný|Coprinus comatus||Bílý válcovitý klobouk s vlnitými šupinami; zralý se od okraje rozplývá v černý „inkoust“; posuvný prsten; trávníky, okraje cest
+holubinka hlínožlutá|Russula ochroleuca||Klobouk okrově až citrónově žlutý; lupeny a třeň bílé, třeň stářím šedne; chuť mírná až slabě pálivá; hojná pod smrky
+holubinka mandlová|Russula vesca||Klobouk masově hnědorůžový, slupka NEDOSAHUJE k okraji (ustupuje, odkrývá dužninu); lupeny bílé, často rezavě skvrnité; mírná chuť, oříšková vůně
+holubinka trávozelená|Russula aeruginea||Klobouk trávově zelený, lepkavý, uprostřed často rezavě skvrnitý; lupeny krémové, rezavě skvrnité; mírná chuť; pod břízami
+hřib borový|Boletus pinophilus||Klobouk červenohnědý až vínový, sametový; třeň hnědý se světlou síťkou; rourky bílé→žlutozelené; nemodrá; pod borovicemi
+hřib dubový|Boletus reticulatus||Klobouk světle hnědý, za sucha popraskaný; třeň s jemnou síťkou po celé délce; rourky bílé→olivové; nemodrá; v listnatém lese, letní
+hřib hnědý|Imleria badia||Klobouk kaštanově hnědý, za vlhka lepkavý; rourky žlutozelené, MODRAJÍ při tlaku; třeň hnědý, bez síťky; pod smrky
+hřib kovář|Boletus luridiformis|Neoboletus luridiformis|Klobouk tmavě hnědý, sametový; rourky žluté s ČERVENÝMI póry; třeň žlutý s červenými tečkami (ne síťka); dužnina silně indigově modrá. Jedlý jen povařený
+hřib kříšť|Boletus calopus|Caloboletus calopus|⚠ Klobouk šedobéžový až olivový; třeň žlutý nahoře, dole červený, s ČERVENOU síťkou; rourky žluté, modrají; chuť velmi HOŘKÁ (nejedlý)
+hřib peprný|Chalciporus piperatus||Malý, klobouk skořicově hnědý; rourky široké, skořicově až rezavě hnědé; třeň žlutý, báze žlutá; chuť PÁLIVÁ jako pepř
+hřib satan|Boletus satanas|Rubroboletus satanas|⚠ Mohutný; klobouk bělavě šedý; póry červené; třeň baňatý, žlutý s červenou síťkou; modrá; stářím zapáchá. Jedovatý
+hřib smrkový|Boletus edulis||Klobouk hnědý, hladký, okraj světlejší; třeň bělavý se světlou síťkou, nahoře nejvýraznější; rourky bílé→olivové; nemodrá; pod smrky
+hřib žlučník|Tylopius felleus|Tylopilus felleus|Podobný hřibu smrkovému, ale rourky narůžovělé (ne bílé!) a síťka na třeni hrubá, tmavá; chuť velmi HOŘKÁ – zkazí pokrm
+hřib žlutomasý|Xerocomus chrysenteron|Xerocomellus chrysenteron|Klobouk hnědý, sametový, popraskaný – v prasklinách červenavá dužnina; rourky žluté, široké, slabě modrají; třeň bez síťky, často červenavý
+choroš šupinatý|Polyporus squamosus||Velký, stopkatý, vějířovitý; klobouk okrový s hnědými šupinami; póry hranaté, bílé→krémové; báze třeně černá; vůně okurky/mouky; na listnáčích
+klouzek sličný|Suillus grevillei||Klobouk jasně žlutý až oranžový, lepkavý; rourky žluté; třeň s bělavým prstenem; vázán na MODŘÍNY
+klouzek strakoš|Suillus variegatus||Klobouk matný, olivově žlutohnědý, jemně šupinatý; rourky olivové, modrají; třeň bez prstenu; pod borovicemi
+kotrč kadeřavý|Sparassis crispa||Velký „květák“ krémové barvy z vlnitých plochých větví; roste u báze borovic a na pařezech; mladá jedlá
+kozák březový|Leccinum scabrum||Klobouk šedohnědý, hladký, matný; třeň bělavý s tmavými šupinkami; dužnina nemodrá; pod břízami
+krásnorůžek lepkavý|Calocera viscosa||Žlutooranžový rosolovitý keříček „jelení paroží“, 3–10 cm; lepkavý; na pařezech a kmenech jehličnanů
+křemenáč osikový|Leccinum rufum|Leccinum aurantiacum|Klobouk cihlově až oranžově červený; třeň bělavý s tmavými šupinkami; dužnina na řezu šedofialová až černá; pod osikami
+kuřátka přímá|Ramaria stricta||Husté PŘÍMÉ větvičky rostoucí rovnoběžně vzhůru; okrově béžové; roste na dřevě; chuť hořká
+liška obecná|Cantharellus cibarius||Celá vaječně žlutá; klobouk nálevkovitý s vlnitým okrajem; místo lupenů žilnaté lišty sbíhající po třeni; vůně meruněk
+lištička pomerančová|Hygrophoropsis aurantiaca||Oranžová; PRAVÉ husté vidličnaté lupeny (ne žilnaté lišty jako liška); klobouk plochý, okraj podvinutý; bez meruňkové vůně; na jehličí
+muchomůrka citronová|Amanita citrina||⚠ Klobouk bledě citrónově žlutý s bělavými zbytky blány; hlíznatá bulva s okrajem; prsten; vůně syrových brambor/ředkve; podobná zelené!
+muchomůrka červená|Amanita muscaria||⚠ Klobouk červený s bílými bradavkami; bílý prsten; bulva s kroužky bradavek; lupeny bílé. Jedovatá
+muchomůrka růžovka|Amanita rubescens||Klobouk hnědorůžový s šedavými šupinkami; dužnina na řezu a ošlehaná červená; třeň s rýhovaným prstenem; jen povařená
+muchomůrka tygrovaná|Amanita pantherina||⚠ Klobouk hnědý s bílými bradavkami; třeň hladký, bulva s límcovitým okrajem; lupeny bílé; dužnina NEčervená; jedovatá
+muchomůrka zelená|Amanita phalloides||⚠ SMRTELNĚ JEDOVATÁ! Klobouk olivově zelený, hladký (bývá i bělavý); lupeny bílé; prsten; váčkovitá POCHVA na bázi – při sběru vždy vykopat celou
+padlí dubové|Microsphaera alphitoides|Erysiphe alphitoides|Bělavý moučnatý povlak na listech dubu; parazit, listy se deformují
+paličkovice nachová|Claviceps purpurea||⚠ Tmavě fialová až černá paličkovitá zrna („námel“, 1–3 cm) v klasech žita a trav; jedovatý (ergotismus)
+pečárka polní|Agaricus campestris||Klobouk bílý, hladký až jemně šupinatý; lupeny nejdřív růžové, později čokoládově hnědé; jednoduchý prsten; louky a pastviny
+pestřec obecný|Scleroderma citrinum||⚠ Hlíza bez třeně, tvrdá, žlutohnědá šupinatá kůra; uvnitř tmavě fialovočerná hmota; jedovatý
+pýchavka obecná|Lycoperdon perlatum||Bělavá hruška pokrytá korálkovitými ostny, po otření zůstávají políčka; uvnitř bílá dužnina (stářím olivově hnědá spóra)
+ryzec kravský|Lactarius torminosus||⚠ Klobouk růžovooranžový, koncentricky zonovaný, s huňatým podvinutým okrajem; mléko bílé, PÁLIVÉ; pod břízami. Syrový jedovatý
+ryzec pravý|Lactarius deliciosus||Klobouk oranžový, zonovaný; mléko ORANŽOVÉ; na poranění šedozelená; pod borovicemi
+ryzec syrovinka|Lactarius volemus||Klobouk oranžovohnědý, suchý, sametový; hojné bílé nepálivé mléko, které hnědne; vůně po sledích/rybách
+sírovec žlutooranžový|Laetiporus sulphureus||Střechovité konzoly až růžice, sírově žluté až oranžové; mladý šťavnatý; na kmenech listnáčů
+smrž jedlý|Morchella aesculenta|Morchella esculenta|Klobouk vejcovitý, žlutohnědý, s důlky (voština); celá houba DUTÁ, klobouk srostlý s třeněm; jarní houba
+svraštělka javorová|Rhytisma acerinum||Velké černé lesklé skvrny („dehtové“) na listech javorů
+špička obecná|Marasmius oreades||Drobná krémově okrová houba; lupeny řídké; třeň pružný, houževnatý; tvoří „čarodějné kruhy“ na trávnících
+třepenitka svazčitá|Hypholoma fasciculare||⚠ Sírově žlutá, husté trsy na pařezech; lupeny žlutozelené→olivově černé; chuť hořká; jedovatá
+ucháč obecný|Gyromitra exculenta|Gyromitra esculenta|⚠ Klobouk mozkovitě svraštělý, červenohnědý; třeň bělavý, dutý; jarní; syrový jedovatý
+václavka obecná|Armillaria mellea||Medově žlutohnědá, husté trsy na pařezech/kořenech; klobouk drobně šupinatý; prsten; černé provazce (rhizomorfy); jen povařená
+závojenka olovová|Entoloma sinuatum||⚠ Klobouk šedobělavý; lupeny nejdřív žlutavé, pak špinavě růžové; vůně mouky/ředkve; vyvolává silné žaludeční potíže
+dutohlávka sobí|Cladonia rangiferina||Šedobílé křovinkovité, větvené, bez pohárků; 5–10 cm; vřesoviště, jehličnaté lesy („sobí mech“)
+mapovník zeměpisný|Rhizocarpon geographicum||Korovitý, žlutozelený s černými hranami políček (jako mapa); na silikátových skalách
+provazovka obecná|Usnea filipendula||Vousatý keříček šedozelený; po natažení uvnitř pružná bílá centrální „šňůra“; na stromech
+pukléřka islandská|Cetraria islandica||Keříčkovitě lupenitý, hnědý až olivový, laloky žlábkovité s brvami na okrajích; horské louky a hole
+terčovka bublinatá|Hypogymnia physodes||Šedozelený lupenitý; laloky na koncích duté, nafouklé; na kůře a větvích jehličnanů
+terčovník zední|Xanthoria parientina|Xanthoria parietina|Oranžově žlutý lupenitý; terčovité plodnice uprostřed; na kůře, zdech, betonu (hodně dusíku)`.split('\n').map(l=>{const[n,l2,c,p]=l.split('|');return{n,l:l2,c,p:p.split('; ').map(s=>s.trim())}});
+const N=D.length,G=i=>i<2?'I. Hlenky':i>=N-6?'III. Lišejníky':'II. Houby';
+const $=s=>document.querySelector(s),sel=$('#sel'),lb=$('#lb'),li=$('#li'),q=$('#q'),res=$('#res');
+const norm=t=>(t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+let cur=0,tok=0,S=1,X=0,Y=0,F=[],L=0;
+D.forEach((e,i)=>sel.add(new Option((i+1)+'. '+e.n,i)));
+const SKIP={'Tylopilus felleus':[1,4]}; // hřib žlučník: vynechat 2. a 5. fotku
+const BAD=/illustr|plate|drawing|atlas|tafel|painting|lithograph|aquarel|spore|micro|mikro|culture|herbar|\bmap\b|stamp|dish|cooked|recipe|label/i;
+const API='https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&prop=imageinfo&iiprop=url|mime|extmetadata&iiurlwidth=420&iiextmetadatafilter=Artist|LicenseShortName&';
+async function get(q){const r=await(await fetch(API+q)).json();return Object.values(r.query?.pages||{})}
+async function imgs(name){
+ let all=[];const seen=new Set();
+ for(const q of['generator=categorymembers&gcmlimit=50&gcmtype=file&gcmtitle='+encodeURIComponent('Category:'+name),'generator=search&gcmlimit=50&gsrlimit=50&gsrnamespace=6&gsrsearch='+encodeURIComponent('"'+name+'" filetype:bitmap')]){
+  for(const p of await get(q)){const i=p.imageinfo?.[0];if(!i||i.mime!=='image/jpeg'||BAD.test(p.title)||seen.has(p.pageid))continue;seen.add(p.pageid);all.push({t:p.title,i})}
+  if(all.length>=7)break}
+ all.sort((a,b)=>a.t.localeCompare(b.t));
+ const k=Math.min(10,all.length),out=[];for(let j=0;j<k;j++)out.push(all[Math.floor(j*all.length/k)]);
+ const sk=SKIP[name]||[];return out.filter((_,j)=>!sk.includes(j))}
+async function show(n){
+ cur=(n+N)%N;const e=D[cur],t=++tok,name=e.c||e.l;sel.value=cur;F=[];
+ $('#grp').textContent=G(cur);$('#cnt').textContent=(cur+1)+' / '+N;$('#cz').textContent=e.n;
+ $('#lat').textContent=e.l+(e.c?' (dnes: '+e.c+')':'');
+ $('#pts').innerHTML=e.p.map(x=>'<li>'+x.replace('⚠ ','')+'</li>').join('');
+ $('#info').className=e.p.join('').includes('⚠')?'danger':'';
+ $('#links').innerHTML='<a target="_blank" rel="noopener" href="https://commons.wikimedia.org/wiki/Category:'+encodeURIComponent(name.replace(/ /g,'_'))+'">Všechny fotky na Commons</a><a target="_blank" rel="noopener" href="https://cs.wikipedia.org/w/index.php?search='+encodeURIComponent(name)+'">Wikipedie</a>';
+ window.scrollTo({top:0});
+ const g=$('#gal');g.innerHTML='<p class="m">Načítám fotky…</p>';
+ try{const f=await imgs(name);if(t!==tok)return;g.innerHTML=f.length?'':'<p class="m">Žádné vhodné fotky – použij odkaz na Commons.</p>';
+  f.forEach(({i})=>{const au=(i.extmetadata?.Artist?.value||'neznámý autor').replace(/<[^>]*>/g,''),lic=i.extmetadata?.LicenseShortName?.value||'';
+   const idx=F.length;F.push({src:i.thumburl.replace(/\/\d+px-/,'/1600px-'),orig:i.url,cap:'<b>'+e.n+'</b> · © '+au+(lic?' · '+lic:'')+' · <a target="_blank" rel="noopener" href="'+i.descriptionurl+'">zdroj</a>'});
+   const fg=document.createElement('figure'),im=new Image();im.src=i.thumburl;im.loading='lazy';im.alt=e.n;im.tabIndex=0;
+   im.onclick=()=>zoom(idx);im.onkeydown=ev=>ev.key==='Enter'&&zoom(idx);fg.append(im);g.append(fg)});
+  if(f.length&&f.length<7)g.insertAdjacentHTML('afterbegin','<p class="m">Na Commons je méně vhodných fotek (zobrazeno '+f.length+').</p>')
+ }catch(x){if(t===tok)g.innerHTML='<p class="m">Fotky se nepodařilo načíst. Zkontroluj připojení k internetu a otevři soubor ve stažené podobě.</p>'}}
+function tr(){li.style.transform='translate('+X+'px,'+Y+'px) scale('+S+')'}
+function zoom(n){L=(n+F.length)%F.length;const f=F[L];li.onerror=()=>{li.onerror=null;li.src=f.orig};li.src=f.src;S=1;X=Y=0;tr();
+ $('#lc').innerHTML=f.cap;$('#lk').textContent=(L+1)+' / '+F.length;$('#lp').hidden=$('#ln').hidden=F.length<2;lb.hidden=false}
+lb.onwheel=ev=>{ev.preventDefault();S=Math.min(8,Math.max(1,S*(ev.deltaY<0?1.2:1/1.2)));if(S===1)X=Y=0;tr()};
+li.ondblclick=()=>{S=S>1?1:3;X=Y=0;tr()};
+let dr=null,x0=0;li.onpointerdown=ev=>{dr=[ev.clientX-X,ev.clientY-Y];x0=ev.clientX;li.setPointerCapture(ev.pointerId)};
+li.onpointermove=ev=>{if(dr&&S>1){X=ev.clientX-dr[0];Y=ev.clientY-dr[1];tr()}};
+li.onpointerup=ev=>{if(dr&&S===1&&Math.abs(ev.clientX-x0)>60)zoom(L+(ev.clientX<x0?1:-1));dr=null};
+lb.onclick=ev=>{if(ev.target===lb)lb.hidden=true};$('#x').onclick=()=>lb.hidden=true;
+$('#lp').onclick=()=>zoom(L-1);$('#ln').onclick=()=>zoom(L+1);
+$('#pv').onclick=()=>show(cur-1);$('#nx').onclick=()=>show(cur+1);sel.onchange=()=>show(+sel.value);
+let hit=[];
+function find(){const v=norm(q.value.trim());if(!v){res.hidden=true;hit=[];return}
+ hit=D.map((e,i)=>({e,i})).filter(({e})=>norm(e.n+' '+e.l+' '+(e.c||'')).includes(v)).slice(0,12);
+ res.innerHTML=hit.length?hit.map(({e,i})=>'<button data-i="'+i+'">'+e.n+'<i>'+(e.c||e.l)+'</i></button>').join(''):'<p>Nic nenalezeno.</p>';res.hidden=false}
+function pick(i){q.value='';res.hidden=true;q.blur();show(i)}
+q.oninput=find;q.onfocus=find;q.onkeydown=ev=>{if(ev.key==='Enter'&&hit[0])pick(hit[0].i);if(ev.key==='Escape'){q.value='';res.hidden=true}};
+res.onclick=ev=>{const b=ev.target.closest('button');if(b)pick(+b.dataset.i)};
+document.addEventListener('click',ev=>{if(!ev.target.closest('#sw'))res.hidden=true});
+document.onkeydown=ev=>{if(!lb.hidden){if(ev.key==='Escape')lb.hidden=true;else if(ev.key==='ArrowRight')zoom(L+1);else if(ev.key==='ArrowLeft')zoom(L-1);return}
+ if(ev.target.matches('input,select'))return;if(ev.key==='ArrowRight')show(cur+1);else if(ev.key==='ArrowLeft')show(cur-1);else if(ev.key==='/'){ev.preventDefault();q.focus()}};
+show(0);
+</script></body></html>
